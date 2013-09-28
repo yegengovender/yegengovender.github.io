@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="google-site-verification" content="rbDhZy3hGYP0h79Gn02ERCljGrTziMtktp3Tx5oq28g" />
+    <title></title>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/jquery-1.9.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+</head>
+
+<body ng-app="SongzaApp">
+    <a href="https://github.com/yegengovender/SongzaBrowser">
+        <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub">
+    </a>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-3">
+                <h3>SONGZA BROWSER</h3>
+            </div>
+        </div>
+
+        <div ng-controller="songzaController">
+            <div class="popup" id="mymodal" ng-show="showDetails">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                            <div id="closeButton">
+                                <a ng-click="hideDetails()"><i class="glyphicon glyphicon-remove-circle"></i></a>
+                            </div>
+
+                            <div class="col-md-12" id="nowPlayingBox">
+                                <div>
+
+                                    <h4>{{stationNext.song.artist.name}}</h4>
+                                    <h3>{{stationNext.song.title}}</h3>
+                                    <p>
+                                        <img ng-src="{{stationNext.song.cover_url}}" id="nowplayingArt" />
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p>
+                                        <audio id="player" controls>
+                                            <source ng-src="{{stationNext.listen_url}}" type="audio/mp4">
+                                            <source ng-src="{{stationNext.listen_url}}" type="audio/mp3">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                        <p>
+                                            <a class="btn btn-primary" ng-click="getStationNext(stationDetails)"><i class="glyphicon glyphicon-forward"></i></a>
+                                        </p>
+
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" id="categoryDescription">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div>
+                                            <h4>{{stationDetails.name}} - {{stationDetails.song_count}} songs</h4>
+                                        </div>
+
+                                        <div>
+                                            <img ng-src="{{stationDetails.cover_url}}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        <p>
+                                            {{stationDetails.description}}
+                                        </p>
+                                        <strong>Featuring</strong>
+                                        <li ng-repeat="artist in stationDetails.featured_artists">{{artist.name}}</li>
+
+                                        <p>
+                                            <a class="btn btn-primary" ng-click="playStation(stationDetails)"><i class="glyphicon glyphicon-play"></i></a>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="row">
+                
+                <ul class="nav nav-pills mainMenu">
+                    <li ng-repeat="category in categories" ng-class="isCategory(category)"><a href="#" ng-click="selectCategory(category)">{{category}}</a></li>
+
+                </ul>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-xs-12">
+                </div>
+                <div class="col-md-10 col-xs-12">
+                    <h4>{{genre.name}}</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-xs-6" id="sidebar">
+
+                    <div class="row" id="searchGenres">
+                        <input placeholder="search {{selectedCategory}}" ng-model="genreSearch" ng-show="selectedCategory" />
+                    </div>
+
+                    <div class="row" id="genres">
+                        <ul class="nav bs-sidenav">
+                            <li ng-repeat="genre in genres | filter:genreSearch">
+                                <a href="#" ng-click="getPlaylists(genre)">{{genre.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="col-md-10 col-xs-6">
+
+                    <div class="row" id="searchStations">
+
+                        <input placeholder="search stations" ng-model="stationSearch" ng-show="genre" />
+                    </div>
+
+                    <div id="stations" class="row">
+                        <div class="col-md-3 stationThumb" ng-repeat="station in stations | filter:stationSearch" ng-click="showStation(station)">
+                            <span>
+                                <img ng-src="{{station.cover_url}}">
+                                <h4>{{station.name}}</h4>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
